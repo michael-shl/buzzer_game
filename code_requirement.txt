@@ -1,0 +1,7 @@
+please provide a python code to meet the following requirement:
+1. the code need to be running headless automatically on raspberry pi 5 when the raspberry is powered on 
+2. the python version is 3.11.2
+The python code need to have the following functionilities:
+1. initialize four variables: count=0, delay1=1, delay2=5, pin_num=5, green_pin=27,
+2. have a function named reset_led to set the output to low for the pin 4, 5, 6
+3. have a function name turn_on_led to set the output t
