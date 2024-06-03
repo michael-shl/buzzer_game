@@ -5,7 +5,7 @@ import os
 
 # Variables
 count = 0
-delay1 = 0.1
+delay1 = 1
 delay2 = 5
 pin_index = 0  # Start with the first LED in the list
 green_pin = 27
@@ -35,7 +35,7 @@ def turn_on_led():
 
 # Function to play sound
 def play_sound(file_name):
-    os.system(f"aplay {sounds_dir}/{file_name}.wav")
+    os.system(f"ffplay {sounds_dir}/{file_name}.wav")
 
 # Function to speak text
 def speak(text):
@@ -80,3 +80,4 @@ def check_green():
 while True:
     check_yellow()
     check_green()
+    time.sleep(0.1)

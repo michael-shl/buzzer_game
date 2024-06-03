@@ -1,11 +1,11 @@
 from gpiozero import LED, Button
 import time
-import pyttsx3
+from gtts import gTTS
 import os
 
 # Variables
 count = 0
-delay1 = 0.1
+delay1 = 1
 delay2 = 5
 pin_index = 0  # Start with the first LED in the list
 green_pin = 27
@@ -17,9 +17,6 @@ led_pins = [4, 5, 6]
 leds = [LED(pin) for pin in led_pins]
 green_button = Button(green_pin, pull_up=True)
 yellow_button = Button(yellow_pin, pull_up=True)
-
-# Initialize text-to-speech engine
-engine = pyttsx3.init()
 
 # Function to reset LEDs
 def reset_led():
@@ -39,8 +36,10 @@ def play_sound(file_name):
 
 # Function to speak text
 def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+    tts = gTTS(text=text, lang='en')
+    tts.save('temp.mp3')
+    os.system('mpg321 temp.mp3')
+    os.remove('temp.mp3')
 
 # Initialize the script
 reset_led()
@@ -80,3 +79,4 @@ def check_green():
 while True:
     check_yellow()
     check_green()
+    time.sleep(0.1)
