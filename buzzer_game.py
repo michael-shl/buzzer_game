@@ -2,6 +2,7 @@ from gpiozero import LED, Button
 import time
 import pyttsx3
 import os
+import threading
 
 # Variables
 count = 0
@@ -49,16 +50,16 @@ play_sound("Gong")
 def check_yellow():
     global count, pin_index
     if yellow_button.is_pressed:
-        play_sound("zoop")
+        threading.Thread(target=play_sound, args=("zoop",)).start()
         turn_on_led()
-        speak("careful")
+        threading.Thread(target=speak, args=("careful",)).start()
         count += 1
         time.sleep(delay1)
 
         if count == 3:
             for _ in range(3):
-                play_sound("Alien_Creak1")
-            speak(f"You lose! Game will start in {delay2} seconds")
+                threading.Thread(target=play_sound, args=("Alien_Creak1",)).start()
+            threading.Thread(target=speak, args=(f"You lose! Game will start in {delay2} seconds",)).start()
             time.sleep(delay2)
             count = 0
             reset_led()
@@ -71,8 +72,8 @@ def check_green():
         leds[3].on()
         leds[4].on()
         leds[5].on()
-        play_sound("dance_around")
-        speak(f"You win! Game will restart in {delay2} seconds")
+        threading.Thread(target=play_sound, args=("dance_around",)).start()
+        threading.Thread(target=speak, args=(f"You win! Game will restart in {delay2} seconds",)).start()
         time.sleep(delay2)
         count = 0
         reset_led()
