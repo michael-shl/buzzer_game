@@ -69,9 +69,7 @@ def check_yellow():
 def check_green():
     global count, pin_index
     if green_button.is_pressed:
-        leds[3].on()
-        leds[4].on()
-        leds[5].on()
+        for i in range(3, 6): leds[i].on()
         threading.Thread(target=play_sound, args=("dance_around",)).start()
         threading.Thread(target=speak, args=(f"You win! Game will restart in {delay2} seconds",)).start()
         time.sleep(delay2)
