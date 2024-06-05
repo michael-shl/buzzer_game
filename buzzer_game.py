@@ -1,7 +1,7 @@
 from gpiozero import LED, Button
 import time
 import subprocess
-import pyttsx3
+import os
 
 # Variables
 count = 0
@@ -11,6 +11,10 @@ pin_index = 0  # Start with the first LED in the list
 green_pin = 27
 yellow_pin = 17
 sounds_dir = '/home/eastonli/buzzer_game/sounds'
+speech_dir = '/home/eastonli/buzzer_game/speech'
+
+# Ensure the speech directory exists
+os.makedirs(speech_dir, exist_ok=True)
 
 # Setup LEDs and buttons
 led_pins = [4, 5, 6, 13, 19, 26]
@@ -36,9 +40,20 @@ def play_sound(file_name):
 
 # Function to speak text
 def speak(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
+    # Generate a filename based on the first one or two words of the text
+    words = text.split()
+    if len(words) == 1:
+        filename = words[0].lower() + ".wav"
+    else:
+        filename = "_".join(words[:2]).lower() + ".wav"
+    file_path = os.path.join(speech_dir, filename)
+
+    # Check if the file already exists
+    if not os.path.exists(file_path):
+        subprocess.call(['espeak', '-w', file_path, text])
+
+    # Play the speech file
+    subprocess.Popen(['aplay', file_path]).wait()
 
 # Initialize the script
 reset_led()
@@ -67,9 +82,7 @@ def check_yellow():
 def check_green():
     global count, pin_index
     if green_button.is_pressed:
-        leds[3].on()
-        leds[4].on()
-        leds[5].on()
+        [led.on() for led in leds[3:6]]
         play_sound("dance_around")
         time.sleep(15)  # Ensure sounds are spaced out
         speak(f"You win! Game will restart in {delay2} seconds")
